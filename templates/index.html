@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📄 简历优化助手</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --radius: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+        .header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .header p { opacity: 0.9; font-size: 1.05rem; }
+
+        /* Container */
+        .container { max-width: 900px; margin: 0 auto; padding: 1.5rem; }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border: 1px solid var(--border);
+        }
+        .card h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .card h3 { font-size: 1.05rem; margin: 1rem 0 0.5rem; color: var(--primary); }
+
+        /* Tabs (input method) */
+        .input-tabs {
+            display: flex;
+            gap: 0;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        .input-tab {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            background: #f8fafc;
+            border: none;
+            transition: all 0.2s;
+        }
+        .input-tab:hover { background: #f1f5f9; }
+        .input-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Upload Zone */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #fafbfc;
+        }
+        .upload-zone:hover, .upload-zone.dragover {
+            border-color: var(--primary);
+            background: #eef2ff;
+        }
+        .upload-zone .icon { font-size: 3rem; margin-bottom: 0.75rem; }
+        .upload-zone p { color: var(--text-secondary); margin-bottom: 0.5rem; }
+        .upload-zone .hint { font-size: 0.85rem; color: #94a3b8; }
+
+        /* Text Input Area */
+        .text-input-area textarea {
+            width: 100%;
+            min-height: 280px;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.92rem;
+            font-family: inherit;
+            resize: vertical;
+            line-height: 1.7;
+            background: #fafbfc;
+        }
+        .text-input-area textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+            background: white;
+        }
+        .text-hint {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: #f0f9ff;
+            border-radius: 6px;
+            border-left: 3px solid var(--primary);
+        }
+
+        /* Form Elements */
+        input[type="file"] { display: none; }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.2s;
+            background: white;
+        }
+        input[type="text"]:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+        }
+        textarea { resize: vertical; min-height: 80px; }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+        .btn-primary:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-success:hover { background: #059669; }
+        .btn-outline { background: transparent; color: var(--primary); border: 1.5px solid var(--primary); }
+        .btn-outline:hover { background: #eef2ff; }
+        .btn-sm {
+            padding: 0.4rem 0.85rem;
+            font-size: 0.82rem;
+            border-radius: 6px;
+        }
+        .btn-group { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; }
+
+        /* Step indicator */
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: var(--border);
+            color: var(--text-secondary);
+            transition: all 0.3s;
+        }
+        .step.active { background: var(--primary); color: white; }
+        .step.done { background: var(--success); color: white; }
+        .step-num {
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+        .step.active .step-num, .step.done .step-num { background: rgba(255,255,255,0.4); }
+
+        /* Section visibility */
+        .section { display: none; }
+        .section.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Tags / Keywords */
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.3rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            margin: 0.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1.5px solid transparent;
+        }
+        .tag-green { background: #d1fae5; color: #065f46; }
+        .tag-red { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
+        .tag-red:hover { background: #fecaca; transform: translateY(-1px); }
+        .tag-red.supplemented { background: #d1fae5; color: #065f46; border-color: #6ee7b7; }
+        .tag-yellow { background: #fef3c7; color: #92400e; }
+        .tag-blue { background: #dbeafe; color: #1e40af; }
+        .tag-purple { background: #ede9fe; color: #5b21b6; }
+        .tag-hint { font-size: 0.7rem; opacity: 0.7; }
+
+        /* Score circle */
+        .score-circle {
+            width: 100px; height: 100px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin: 0 auto 1rem;
+        }
+        .score-high { background: linear-gradient(135deg, #10b981, #34d399); color: white; }
+        .score-mid { background: linear-gradient(135deg, #f59e0b, #fbbf24); color: white; }
+        .score-low { background: linear-gradient(135deg, #ef4444, #f87171); color: white; }
+        .score-num { font-size: 2rem; line-height: 1; }
+        .score-label { font-size: 0.75rem; opacity: 0.9; }
+
+        /* Lists */
+        .check-list { list-style: none; padding: 0; }
+        .check-list li { padding: 0.5rem 0; padding-left: 1.75rem; position: relative; border-bottom: 1px solid #f1f5f9; }
+        .check-list li:last-child { border-bottom: none; }
+        .check-list .good::before { content: "✅"; position: absolute; left: 0; }
+        .check-list .bad::before { content: "❌"; position: absolute; left: 0; }
+        .check-list .tip::before { content: "💡"; position: absolute; left: 0; }
+
+        /* Career path cards */
+        .path-card {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 10px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary);
+        }
+        .path-card .level-title { font-weight: 700; font-size: 1rem; color: var(--primary-dark); margin-bottom: 0.5rem; }
+        .path-card .meta { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.75rem; font-size: 0.85rem; }
+        .path-card .meta span { color: var(--text-secondary); }
+        .path-card .meta strong { color: var(--success); }
+        .path-card ul { padding-left: 1.25rem; }
+        .path-card li { margin-bottom: 0.25rem; font-size: 0.92rem; }
+
+        /* Salary table */
+        .salary-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.92rem; }
+        .salary-table th { background: var(--primary); color: white; padding: 0.7rem; text-align: left; font-weight: 600; }
+        .salary-table td { padding: 0.7rem; border-bottom: 1px solid var(--border); }
+        .salary-table tr:hover td { background: #f8fafc; }
+
+        /* Interview Q&A */
+        .qa-item {
+            background: #fefefe;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        .qa-item .question { font-weight: 700; color: var(--primary-dark); margin-bottom: 0.75rem; font-size: 1rem; }
+        .qa-item .answer { color: var(--text-secondary); line-height: 1.7; font-size: 0.93rem; }
+
+        /* Optimized Resume Display */
+        .resume-output {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem 2rem;
+            max-height: 65vh;
+            overflow-y: auto;
+            line-height: 1.9;
+            font-size: 0.92rem;
+            position: relative;
+        }
+        .resume-output h2 { color: var(--text); border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem; margin-top: 1.5rem; }
+        .resume-output h3 { color: var(--primary); margin-top: 1rem; font-size: 1rem; }
+        .resume-output strong { color: var(--text); }
+        .resume-output hr { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+        .resume-output blockquote {
+            border-left: 3px solid var(--primary);
+            padding: 0.5rem 1rem;
+            background: #f8fafc;
+            border-radius: 0 8px 8px 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Copy Button */
+        .copy-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: #ecfdf5;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.88rem;
+            color: #065f46;
+        }
+        .copy-bar.hidden { display: none; }
+        .copy-bar .copy-btn {
+            margin-left: auto;
+            padding: 0.35rem 0.85rem;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-bar .copy-btn:hover { background: #059669; }
+        .copy-bar .copy-btn.copied { background: #6b7280; }
+
+        /* Supplement Modal */
+        .supplement-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .supplement-overlay.active { display: flex; }
+        .supplement-modal {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.75rem;
+            max-width: 560px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .supplement-modal h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+            color: var(--text);
+        }
+        .supplement-modal .keyword-badge {
+            display: inline-block;
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .supplement-modal p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+        .supplement-modal textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 0.85rem;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.92rem;
+            font-family: inherit;
+            resize: vertical;
+            margin-bottom: 1rem;
+            transition: border-color 0.2s;
+        }
+        .supplement-modal textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+        }
+        .supplement-modal .btn-group { margin-top: 0; }
+        .supplement-modal .close-x {
+            float: right;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            line-height: 1;
+            padding: 0 0.25rem;
+        }
+        .supplement-modal .close-x:hover { color: var(--text); }
+
+        /* Supplement hint in step 3 */
+        .supplement-hint {
+            background: #fffbeb;
+            border: 1.5px solid #fcd34d;
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.25rem;
+            font-size: 0.88rem;
+            color: #92400e;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+        }
+        .supplement-hint .hint-icon { font-size: 1.1rem; flex-shrink: 0; }
+        .supplement-hint strong { color: #b45309; }
+
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px; height: 20px;
+            border: 2px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            flex-shrink: 0;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Market analysis badges */
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+        .market-item { background: #f8fafc; border-radius: 8px; padding: 1rem; text-align: center; }
+        .market-item .label { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.25rem; }
+        .market-item .value { font-weight: 700; font-size: 1rem; }
+
+        /* File info bar */
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: #ecfdf5;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.92rem;
+        }
+        .file-info .name { font-weight: 600; color: #065f46; }
+        .file-info .src-tag {
+            font-size: 0.75rem;
+            padding: 0.15rem 0.5rem;
+            background: #d1fae5;
+            color: #065f46;
+            border-radius: 4px;
+        }
+
+        /* Tabs for results */
+        .tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 1.25rem;
+            overflow-x: auto;
+        }
+        .tab {
+            padding: 0.65rem 1.25rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .tab:hover { color: var(--primary); }
+        .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s; }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container { padding: 1rem; }
+            .header h1 { font-size: 1.5rem; }
+            .card { padding: 1rem; }
+            .btn-group { flex-direction: column; }
+            .btn { width: 100%; }
+            .resume-output { padding: 1rem; font-size: 0.88rem; }
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+    <h1>📄 简历优化助手</h1>
+    <p>上传简历 → 智能诊断 → 职业规划 → 简历优化 → 面试话术</p>
+</div>
+
+<div class="container">
+
+    <!-- Step Indicator -->
+    <div class="steps" id="stepIndicator">
+        <div class="step active" data-step="1"><span class="step-num">1</span>上传简历</div>
+        <div class="step" data-step="2"><span class="step-num">2</span>简历诊断</div>
+        <div class="step" data-step="3"><span class="step-num">3</span>职业规划</div>
+        <div class="step" data-step="4"><span class="step-num">4</span>简历优化</div>
+    </div>
+
+    <!-- ===== STEP 1: 上传/输入简历 ===== -->
+    <div class="section active" id="step1">
+        <div class="card">
+            <h2>📤 上传你的简历</h2>
+
+            <!-- 输入方式切换 -->
+            <div class="input-tabs" id="inputTabs">
+                <button class="input-tab active" data-input="pdf" onclick="switchInputTab('pdf')">📄 PDF上传</button>
+                <button class="input-tab" data-input="text" onclick="switchInputTab('text')">✏️ 文字输入</button>
+            </div>
+
+            <!-- PDF 上传区 -->
+            <div id="pdfInputArea">
+                <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+                    <div class="icon">📄</div>
+                    <p><strong>点击或拖拽上传PDF简历</strong></p>
+                    <p class="hint">支持 .pdf 格式，文件大小不超过16MB</p>
+                </div>
+                <input type="file" id="fileInput" accept=".pdf" onchange="handleUpload(this.files[0])">
+            </div>
+
+            <!-- 文字输入区 -->
+            <div id="textInputArea" class="text-input-area hidden">
+                <textarea id="resumeTextInput" placeholder="请将简历内容粘贴到此处...
+
+例如：
+姓名：xxx
+求职意向：行业运营
+教育经历：xxx大学 xxx专业 2021-2025
+
+实习经历：
+- xxx公司 内容运营 2024.06-2024.09
+  · 负责抖音账号内容策划，平均播放量提升30%
+  · 独立完成10+条短视频脚本撰写
+
+项目经验：
+- 校园活动策划项目
+  · 策划执行校级晚会，覆盖2000+学生
+
+技能证书：CET-6、Python、SQL"></textarea>
+                <div class="text-hint">💡 建议包含：个人信息、教育经历、实习/项目经历、技能证书，文字越完整优化效果越好</div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="btnTextSubmit" onclick="submitTextResume()">
+                        🔍 提交简历
+                    </button>
+                </div>
+            </div>
+
+            <!-- 文件信息栏 -->
+            <div id="fileInfoBar" class="file-info hidden">
+                <span>✅</span>
+                <span class="name" id="fileName"></span>
+                <span class="src-tag" id="srcTag">PDF</span>
+                <span style="color:#64748b;font-size:0.85rem" id="fileSections"></span>
+                <span style="margin-left:auto;font-size:0.82rem;color:#94a3b8;cursor:pointer" onclick="resetUpload()">重新上传</span>
+            </div>
+
+            <!-- 简历内容预览 -->
+            <div id="resumePreviewArea" class="hidden" style="margin-top:1.25rem">
+                <h3 style="margin-bottom:0.75rem">📋 识别到的简历内容</h3>
+                <div id="resumeSectionsList" style="font-size:0.88rem;color:var(--text-secondary);line-height:1.8;background:#f8fafc;border-radius:8px;padding:1rem;max-height:250px;overflow-y:auto;"></div>
+            </div>
+
+            <!-- AI 岗位推荐 -->
+            <div id="jobRecArea" class="hidden" style="margin-top:1.25rem">
+                <h3 style="margin-bottom:0.5rem">🎯 AI 推荐适合你的岗位</h3>
+                <div id="jobRecContent"></div>
+                <p style="font-size:0.82rem;color:#94a3b8;margin-top:0.5rem">点击可快速设为目标岗位</p>
+            </div>
+
+            <!-- 岗位选择 -->
+            <div id="jobInputArea" class="hidden" style="margin-top:1.5rem">
+                <h3>💼 你想投什么岗位？</h3>
+                <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:0.75rem">
+                    输入你的目标岗位，系统会针对性地分析和优化
+                </p>
+                <input type="text" id="targetJob" placeholder="例如：行业运营、商业化运营、品牌营销、广告投放、用户增长..."
+                       style="margin-bottom:0.75rem" />
+
+                <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1rem">
+                    <button class="btn btn-outline btn-sm" onclick="setJob('行业运营')">行业运营</button>
+                    <button class="btn btn-outline btn-sm" onclick="setJob('商业化运营')">商业化运营</button>
+                    <button class="btn btn-outline btn-sm" onclick="setJob('品牌营销')">品牌营销</button>
+                    <button class="btn btn-outline btn-sm" onclick="setJob('广告投放')">广告投放</button>
+                    <button class="btn btn-outline btn-sm" onclick="setJob('用户增长')">用户增长</button>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="btnDiagnose" onclick="goDiagnose()">
+                        🔍 开始分析简历
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== STEP 2: 简历诊断 ===== -->
+    <div class="section" id="step2">
+        <div class="card">
+            <h2>🔍 简历诊断报告</h2>
+            <div id="diagnosisContent"></div>
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="goStep(1)">← 返回修改</button>
+                <button class="btn btn-primary" onclick="goCareer()">下一步：职业规划 →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== STEP 3: 职业规划 ===== -->
+    <div class="section" id="step3">
+        <div class="card">
+            <h2>🎯 职业规划 & 岗位深度分析</h2>
+
+            <!-- 补充经历区域 -->
+            <div class="supplement-hint" id="supplementHint" style="cursor:pointer" onclick="openSupplementModal()">
+                <span class="hint-icon">📝</span>
+                <div>
+                    <strong style="font-size:1rem">💡 有更多经历想告诉AI？点击这里补充！</strong>
+                    <br><span style="font-size:0.85rem;opacity:0.9">你可以把任何相关的经历、项目、技能都写进来，AI会帮你融入简历优化和面试回答中。</span>
+                    <br><span id="suppStatus" style="font-size:0.82rem;color:var(--success);margin-top:0.3rem;display:none">✅ 已补充内容</span>
+                </div>
+            </div>
+
+            <div id="careerContent"></div>
+
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="goStep(2)">← 返回诊断</button>
+                <button class="btn btn-primary" onclick="goOptimize()">下一步：优化简历 →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== STEP 4: 优化结果 ===== -->
+    <div class="section" id="step4">
+        <div class="card">
+            <h2>✍️ 优化后的简历</h2>
+
+            <!-- 复制按钮栏 -->
+            <div class="copy-bar" id="copyBar">
+                <span>👆 简历已生成，可以直接复制使用！</span>
+                <button class="copy-btn" id="copyBtn" onclick="copyResume()">📋 一键复制</button>
+            </div>
+
+            <div class="tabs" id="optTabs">
+                <div class="tab active" data-tab="preview">📄 简历全文</div>
+                <div class="tab" data-tab="interview">🎤 面试话术</div>
+            </div>
+
+            <div class="tab-content active" id="tab-preview">
+                <div class="resume-output" id="optimizedPreview"></div>
+            </div>
+
+            <div class="tab-content" id="tab-interview">
+                <div id="interviewContent"></div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="goStep(3)">← 返回职业规划</button>
+                <button class="btn btn-success" onclick="copyResume()">📋 一键复制简历</button>
+                <button class="btn btn-outline" onclick="location.reload()">🔄 重新开始</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===== 补充经历弹窗 ===== -->
+<div class="supplement-overlay" id="supplementOverlay">
+    <div class="supplement-modal" style="max-width:650px">
+        <span class="close-x" onclick="closeSupplementModal()">&times;</span>
+        <h3>📝 补充你的额外经历</h3>
+        <p style="font-size:0.9rem;color:var(--text-secondary);margin-bottom:0.75rem">
+            把你想到的任何相关经历都写进来，比如：课程项目、兼职经历、社团活动、比赛经验、自学技能等。<br>
+            <strong style="color:var(--primary)">AI会根据这些内容帮你优化简历和准备面试回答！</strong>
+        </p>
+        <textarea id="supplementInput" style="min-height:220px" placeholder="在这里写下你想补充的内容...
+
+例如：
+1. 在大学期间参加过"互联网+"大赛，负责市场调研和商业计划书撰写，项目获得省级二等奖
+2. 大二暑假在某教育机构做兼职助教，负责学员管理和答疑，培养了良好的沟通能力
+3. 自学了Python数据分析，用pandas处理过电商销售数据
+4. 在学生会外联部工作过一年，负责拉赞助，成功谈下3家赞助商
+
+提示：写清楚做了什么、有什么成果，AI会帮你润色！"></textarea>
+        <div class="btn-group">
+            <button class="btn btn-success" onclick="saveSupplementModal()">✅ 保存并继续</button>
+            <button class="btn btn-outline" onclick="closeSupplementModal()">取消</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ========== Global State ==========
+let sessionId = null;
+let inputMode = 'pdf'; // 'pdf' or 'text'
+let supplements = {};  // { keyword: user_input_text }
+let currentSupplementKeyword = null;
+
+// ========== Input Tab Switching ==========
+function switchInputTab(mode) {
+    inputMode = mode;
+    document.querySelectorAll('.input-tab').forEach(t => t.classList.remove('active'));
+    document.querySelector(`.input-tab[data-input="${mode}"]`).classList.add('active');
+    document.getElementById('pdfInputArea').classList.toggle('hidden', mode !== 'pdf');
+    document.getElementById('textInputArea').classList.toggle('hidden', mode !== 'text');
+}
+
+// ========== Step Navigation ==========
+function goStep(n) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById('step' + n).classList.add('active');
+    document.querySelector(`.step[data-step="${n}"]`).classList.add('active');
+    for (let i = 1; i < n; i++) {
+        let el = document.querySelector(`.step[data-step="${i}"]`);
+        if (el) el.classList.add('done');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ========== Reset Upload ==========
+function resetUpload() {
+    sessionId = null;
+    supplements = {};
+    document.getElementById('fileInfoBar').classList.add('hidden');
+    document.getElementById('resumePreviewArea').classList.add('hidden');
+    document.getElementById('jobRecArea').classList.add('hidden');
+    document.getElementById('jobInputArea').classList.add('hidden');
+    document.getElementById('uploadZone').innerHTML = '<div class="icon">📄</div><p><strong>点击或拖拽上传PDF简历</strong></p><p class="hint">支持 .pdf 格式，文件大小不超过16MB</p>';
+    document.getElementById('uploadZone').onclick = () => document.getElementById('fileInput').click();
+    document.getElementById('resumeTextInput').value = '';
+}
+
+// ========== PDF Upload ==========
+const uploadZone = document.getElementById('uploadZone');
+uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+uploadZone.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadZone.classList.remove('dragover');
+    if (e.dataTransfer.files.length) handleUpload(e.dataTransfer.files[0]);
+});
+
+async function handleUpload(file) {
+    if (!file) return;
+    if (!file.name.toLowerCase().endsWith('.pdf')) {
+        alert('请上传 PDF 格式的简历文件');
+        return;
+    }
+    uploadZone.innerHTML = '<div class="loading"></div><p>正在解析简历...</p>';
+    const formData = new FormData();
+    formData.append('resume', file);
+    try {
+        const res = await fetch('/api/upload', { method: 'POST', body: formData });
+        const data = await res.json();
+        if (data.error) { alert(data.error); location.reload(); return; }
+        onResumeLoaded(data, 'pdf', file.name);
+    } catch (err) {
+        alert('上传失败: ' + err.message);
+        location.reload();
+    }
+}
+
+// ========== Text Submit ==========
+async function submitTextResume() {
+    const text = document.getElementById('resumeTextInput').value.trim();
+    if (!text) { alert('请输入简历内容'); return; }
+    const btn = document.getElementById('btnTextSubmit');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loading"></span> 解析中...';
+    try {
+        const res = await fetch('/api/text-upload', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ text: text })
+        });
+        const data = await res.json();
+        if (data.error) { alert(data.error); return; }
+        onResumeLoaded(data, 'text', '文字输入');
+    } catch (err) {
+        alert('解析失败: ' + err.message);
+    }
+    btn.disabled = false;
+    btn.innerHTML = '🔍 提交简历';
+}
+
+// ========== Common: Handle Resume Loaded ==========
+function onResumeLoaded(data, src, filename) {
+    sessionId = data.session_id;
+    supplements = {};
+
+    document.getElementById('fileInfoBar').classList.remove('hidden');
+    document.getElementById('fileName').textContent = src === 'text' ? '文字简历' : data.filename;
+    document.getElementById('srcTag').textContent = src === 'text' ? '文字' : 'PDF';
+    document.getElementById('fileSections').textContent = `已识别 ${data.section_count} 个板块`;
+
+    // Show sections preview
+    let sectionsHtml = '';
+    for (const [key, val] of Object.entries(data.sections || {})) {
+        if (val && val.trim()) {
+            sectionsHtml += `<div style="margin-bottom:0.75rem"><strong style="color:var(--primary)">【${key}】</strong><br>${val.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}</div>`;
+        }
+    }
+    document.getElementById('resumeSectionsList').innerHTML = sectionsHtml || '<p>未识别到有效内容</p>';
+    document.getElementById('resumePreviewArea').classList.remove('hidden');
+
+    // AI job recommendations
+    if (data.job_recommendations && data.job_recommendations.recommended_jobs && data.job_recommendations.recommended_jobs.length) {
+        let recHtml = '<div style="display:grid;gap:0.75rem;margin-top:0.75rem;">';
+        data.job_recommendations.recommended_jobs.forEach(j => {
+            recHtml += `<div onclick="setJob('${j.job}')" style="background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:0.75rem 1rem;cursor:pointer;transition:all 0.2s" onmouseover="this.style.borderColor='var(--primary)';this.style.background='#eef2ff'" onmouseout="this.style.borderColor='var(--border)';this.style.background='#fff'">
+                <div style="font-weight:700;color:var(--primary)">${j.job}</div>
+                <div style="font-size:0.82rem;color:var(--text-secondary);margin-top:0.25rem">${j.match_reason}</div>
+                <div style="font-size:0.8rem;color:var(--success);margin-top:0.25rem">💰 ${j.salary_range || ''} · ${j.key_advice || ''}</div>
+            </div>`;
+        });
+        recHtml += '</div>';
+        if (data.job_recommendations.career_path) {
+            recHtml += `<div style="margin-top:0.75rem;padding:0.75rem;background:#f0f9ff;border-radius:8px;font-size:0.88rem;color:var(--text-secondary)"><strong style="color:var(--primary)">📍 职业路径：</strong>${data.job_recommendations.career_path}</div>`;
+        }
+        document.getElementById('jobRecContent').innerHTML = recHtml;
+        document.getElementById('jobRecArea').classList.remove('hidden');
+    }
+
+    document.getElementById('jobInputArea').classList.remove('hidden');
+}
+
+function setJob(job) {
+    document.getElementById('targetJob').value = job;
+}
+
+// ========== Diagnose ==========
+async function goDiagnose() {
+    const job = document.getElementById('targetJob').value.trim();
+    if (!job) { alert('请输入你想投的目标岗位'); return; }
+    const btn = document.getElementById('btnDiagnose');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loading"></span> 分析中...';
+    try {
+        const res = await fetch('/api/diagnose', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ session_id: sessionId, target_job: job })
+        });
+        const d = await res.json();
+        renderDiagnosis(d);
+        goStep(2);
+    } catch (err) { alert('诊断失败: ' + err.message); }
+    btn.disabled = false;
+    btn.innerHTML = '🔍 开始分析简历';
+}
+
+function renderDiagnosis(d) {
+    const scoreClass = d.score >= 70 ? 'score-high' : d.score >= 40 ? 'score-mid' : 'score-low';
+    let html = `<div style="text-align:center;margin-bottom:1.5rem">
+        <div class="score-circle ${scoreClass}">
+            <span class="score-num">${d.score}</span>
+            <span class="score-label">简历评分</span>
+        </div>
+    </div>`;
+    if (d.good.length) { html += `<h3>✅ 做得好的地方</h3><ul class="check-list">`; d.good.forEach(g => html += `<li class="good">${g}</li>`); html += `</ul>`; }
+    if (d.bad.length) { html += `<h3>❌ 需要改进的地方</h3><ul class="check-list">`; d.bad.forEach(b => html += `<li class="bad">${b}</li>`); html += `</ul>`; }
+    if (d.suggestions.length) { html += `<h3>💡 优化建议</h3><ul class="check-list">`; d.suggestions.forEach(s => html += `<li class="tip">${s}</li>`); html += `</ul>`; }
+    document.getElementById('diagnosisContent').innerHTML = html;
+}
+
+// ========== Career Analysis ==========
+async function goCareer() {
+    const job = document.getElementById('targetJob').value.trim();
+    document.getElementById('careerContent').innerHTML = `<div style="text-align:center;padding:2rem"><div class="loading"></div><p style="color:var(--text-secondary);margin-top:0.5rem">正在分析「${job}」的市场情况...</p></div>`;
+    goStep(3);
+    try {
+        const res = await fetch('/api/career', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ session_id: sessionId, target_job: job })
+        });
+        const d = await res.json();
+        if (d.error) {
+            document.getElementById('careerContent').innerHTML = `<p style="color:var(--danger)">${d.error}</p><p>支持的岗位：${d.available_jobs ? d.available_jobs.join('、') : ''}</p>`;
+            return;
+        }
+        renderCareer(d);
+    } catch (err) { document.getElementById('careerContent').innerHTML = `<p style="color:var(--danger)">分析失败: ${err.message}</p>`; }
+}
+
+function renderCareer(d) {
+    let html = '';
+    html += `<div style="display:flex;align-items:center;gap:1.5rem;margin-bottom:1.5rem;flex-wrap:wrap">
+        <div><div style="font-size:2rem;font-weight:700;color:${d.match_score >= 70 ? 'var(--success)' : d.match_score >= 40 ? 'var(--warning)' : 'var(--danger)'}">${d.match_score}%</div><div style="font-size:0.85rem;color:var(--text-secondary)">岗位匹配度</div></div>
+        <div><div style="font-size:1.1rem;font-weight:600">${d.match_level}</div><div style="font-size:0.9rem;color:var(--text-secondary)">${d.match_advice}</div></div>
+    </div>`;
+    if (d.transferable_skills && d.transferable_skills.length) {
+        html += `<h3>🔄 可迁移能力</h3><div style="margin-bottom:1rem">`;
+        d.transferable_skills.forEach(s => html += `<span class="tag tag-purple">${s}</span>`);
+        html += `</div>`;
+    }
+    if (d.career_advice) {
+        html += `<div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:1rem;margin-bottom:1rem"><strong style="color:var(--success)">🎯 职业建议：</strong><span style="font-size:0.9rem;line-height:1.6">${d.career_advice}</span></div>`;
+    }
+    if (d.matched_keywords && d.matched_keywords.length) {
+        html += `<h3>🔑 已匹配关键词</h3><div style="margin-bottom:1rem">`;
+        d.matched_keywords.forEach(k => html += `<span class="tag tag-green">${k}</span>`);
+        html += `</div>`;
+    }
+    if (d.missing_keywords && d.missing_keywords.length) {
+        html += `<h3>⚠️ 建议补充的关键词</h3><div style="margin-bottom:0.5rem">`;
+        d.missing_keywords.forEach(k => {
+            html += `<span class="tag tag-red">${k}</span>`;
+        });
+        html += `</div><p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1rem">💡 点击上方的"有更多经历想告诉AI"按钮，补充这些关键词相关的经历！</p>`;
+    }
+
+    // Salary
+    html += `<h3>💰 北京薪资水平</h3><table class="salary-table"><tr><th>级别</th><th>薪资范围</th><th>平均</th><th>参考条件</th></tr>`;
+    Object.entries(d.salary).forEach(([level, info]) => {
+        html += `<tr><td><strong>${level === 'junior' ? '初级 (0-2年)' : level === 'mid' ? '中级 (3-5年)' : '高级 (5年+)'}</strong></td><td>${info.range}</td><td><strong>${info.avg}</strong></td><td style="font-size:0.85rem;color:var(--text-secondary)">${info.note}</td></tr>`;
+    });
+    html += `</table>`;
+
+    const m = d.market;
+    html += `<h3>📊 市场分析</h3><div class="market-grid">
+        <div class="market-item"><div class="label">需求程度</div><div class="value">${m.demand}</div></div>
+        <div class="market-item"><div class="label">人才供给</div><div class="value">${m.supply}</div></div>
+        <div class="market-item"><div class="label">入门难度</div><div class="value">${m.difficulty}</div></div>
+        <div class="market-item"><div class="label">趋势判断</div><div class="value">${m.trend}</div></div>
+    </div>
+    <h3>🏢 主要雇主</h3><div style="margin-bottom:1rem">`;
+    m.key_employers.forEach(e => html += `<span class="tag tag-blue">${e}</span>`);
+    html += `</div>`;
+
+    html += `<h3>💼 日常工作内容</h3><ul style="padding-left:1.25rem;margin-bottom:1.5rem">`;
+    d.daily_work.forEach(w => html += `<li>${w}</li>`);
+    html += `</ul>`;
+
+    html += `<h3>🗺️ 发展路径 & 行动指南</h3>`;
+    d.dev_path.forEach((p, i) => {
+        html += `<div class="path-card">
+            <div class="level-title">${p.level} — ${p.title}</div>
+            <div class="meta"><span>💰 ${p.salary}</span><span>📌 ${p.action}</span></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                <div><strong style="font-size:0.85rem;color:var(--text-secondary)">主要工作：</strong><ul>${p.tasks.map(t => `<li>${t}</li>`).join('')}</ul></div>
+                <div><strong style="font-size:0.85rem;color:var(--text-secondary)">需要的能力：</strong><ul>${p.skills.map(s => `<li>${s}</li>`).join('')}</ul></div>
+            </div>
+        </div>`;
+    });
+
+    document.getElementById('careerContent').innerHTML = html;
+}
+
+// ========== Supplement Modal ==========
+// 用户统一补充的内容（不再按关键词分）
+let userSupplementText = '';
+
+function openSupplementModal() {
+    document.getElementById('supplementInput').value = userSupplementText;
+    document.getElementById('supplementOverlay').classList.add('active');
+    document.getElementById('supplementInput').focus();
+}
+
+function closeSupplementModal() {
+    document.getElementById('supplementOverlay').classList.remove('active');
+}
+
+function saveSupplementModal() {
+    userSupplementText = document.getElementById('supplementInput').value.trim();
+    const statusEl = document.getElementById('suppStatus');
+    if (userSupplementText) {
+        supplements['user_input'] = userSupplementText;
+        statusEl.style.display = 'inline';
+        statusEl.textContent = '✅ 已补充 ' + userSupplementText.length + ' 字';
+    } else {
+        delete supplements['user_input'];
+        statusEl.style.display = 'none';
+    }
+    closeSupplementModal();
+}
+
+// 点击遮罩关闭
+document.getElementById('supplementOverlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('supplementOverlay')) closeSupplementModal();
+});
+
+// 旧的按关键词补充函数（保留兼容性，但不再使用）
+const supplementPrompts = {
+    '行业研究': '你在学校里有没有做过行业分析、市场调研或研究报告？比如课程论文、商业比赛、社团调研等？',
+    'B端': '你有没有接触过B端（企业/商家）相关的经历？比如销售助理、客户服务、企业对接、校园代理等？',
+    '客户拓展': '你有没有主动拓展过客户或用户？比如校园代理、兼职销售、社团活动拉新等？',
+    '数据分析': '你在学习或实习中有做过数据分析吗？比如用Excel/PPT整理数据、Python/SQL跑数，或课程作业中的数据处理？',
+    '行业方案': '你有没有写过行业解决方案、策划案或商业计划书？哪怕是课程作业也行！',
+    'BD': '你有没有商务拓展、合作对接的经验？比如谈过赞助、找过合作方、对外沟通协调等？',
+    'GMV': '你有没有接触过GMV、收入、转化率相关的指标？哪怕是自己做过小生意/闲鱼卖货也算！',
+    '商业化': '你有没有变现、商业化相关的经历？比如做过自媒体变现、校园创业项目、有偿服务等？',
+    '竞品分析': '你有没有做过竞品分析？比如写对比测评、调研竞品功能、比较不同产品等？',
+    '用户增长': '你有没有做用户增长相关的经历？比如拉新活动、社群运营、裂变活动、社交媒体增粉等？',
+    '变现': '你有没有变现或赚钱的经历？比如做自媒体、做代理、做小生意、接单赚钱等？',
+    '营收': '你有没有接触过收入、营收相关的概念？哪怕是算过自己的兼职收入也行！',
+    'ARPU': '你有没有接触过用户价值、客单价相关的概念？比如算过自己卖东西的平均单价？',
+    '定价策略': '你有没有做过定价或价格相关的决策？比如兼职定价、产品定价、促销方案设计等？',
+    '广告': '你有没有接触过广告投放、推广相关的工作？哪怕是发传单、朋友圈广告投放也算！',
+    '付费转化': '你有没有做过引导付费、转化的经历？比如卖课、卖会员、做促销转化等？',
+    '流量变现': '你有没有做过流量变现的事？比如自媒体接广告、流量主变现、带货等？',
+    '品牌策划': '你有没有品牌策划相关的经历？比如策划活动、写宣传文案、运营社交媒体账号等？',
+    '市场推广': '你有没有做过市场推广？比如发传单、线上推广、校园宣传、活动推广等？',
+    '营销活动': '你有没有策划或执行过营销活动？比如促销、节日活动、比赛、沙龙等？',
+    '媒介投放': '你有没有接触过媒介投放？比如在小红书/抖音发过推广内容、和品牌合作等？',
+    'KOL': '你有没有和KOL/KOC合作过，或者自己做过博主？',
+    '品牌声量': '你有没有提升品牌声量的经历？比如做社交媒体运营、写推广文章、做PR等？',
+    '信息流': '你有没有接触过信息流广告？比如在抖音/小红书投放过广告，或做过信息流内容？',
+    'SEM': '你有没有接触过搜索广告（SEM）？比如百度推广、关键词投放等？',
+    'SEO': '你有没有做过SEO或搜索引擎优化？比如优化公众号文章、做关键词排名等？',
+    'ROI': '你有没有算过投入产出比（ROI）？比如算过推广花了多少钱、带来了多少收益？',
+    'CTR': '你有没有接触过点击率（CTR）相关的工作？比如分析广告/文章点击率等？',
+    'CPC': '你有没有接触过按点击付费（CPC）广告？',
+    '千川': '你有没有接触过千川/巨量引擎等广告平台？哪怕只是看过后台也算！',
+    '投放策略': '你有没有制定过投放策略或推广计划？哪怕是自己的社交媒体也算！',
+    '素材优化': '你有没有做过广告素材或内容的优化？比如剪辑视频、设计图片、写文案等？',
+    '增长策略': '你有没有做过增长策略相关的事？比如策划拉新活动、裂变活动、用户召回等？',
+    'AARRR': '你有没有接触过AARRR模型（获客-激活-留存-变现-推荐）？',
+    '获客': '你有没有获客相关的经历？比如地推、社群拉新、裂变活动、老带新等？',
+    '留存': '你有没有做用户留存相关的工作？比如社群维护、用户活跃活动、会员运营等？',
+    '裂变': '你有没有做过裂变活动？比如邀请好友得奖励、分享得优惠等？',
+    '用户生命周期': '你有没有接触过用户生命周期管理？比如分析用户流失、做用户分层运营等？',
+    '转化率': '你有没有优化过转化率？比如落地页优化、注册流程优化、购买漏斗优化等？',
+    '增长实验': '你有没有做过A/B测试或增长实验？哪怕是课程实验也行！',
+    '数据驱动': '你有没有用数据驱动决策的经历？比如看数据做优化、AB测试、数据分析报告等？',
+};
+
+// 已移除旧的按关键词补充函数，改用统一的 openSupplementModal
+
+// ========== Optimize ==========
+async function goOptimize() {
+    const job = document.getElementById('targetJob').value.trim();
+    document.getElementById('optimizedPreview').innerHTML = `<div style="text-align:center;padding:3rem"><div class="loading"></div><p style="color:var(--text-secondary);margin-top:0.5rem">正在针对「${job}」优化你的简历...</p></div>`;
+    goStep(4);
+    document.getElementById('copyBar').classList.add('hidden');
+
+    try {
+        const res = await fetch('/api/optimize', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                session_id: sessionId,
+                target_job: job,
+                supplements: supplements  // 包含 user_input 键
+            })
+        });
+        const d = await res.json();
+        renderOptimized(d);
+        renderInterview(d);
+        document.getElementById('copyBar').classList.remove('hidden');
+    } catch (err) {
+        document.getElementById('optimizedPreview').innerHTML = `<p style="color:var(--danger)">优化失败: ${err.message}</p>`;
+    }
+}
+
+function renderOptimized(d) {
+    let html = '';
+    const order = ['求职意向', '个人总结', '教育经历', '实习经历', '项目经验', '技能证书'];
+    order.forEach(key => {
+        if (d[key]) {
+            let content = d[key]
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+                .replace(/^> (.*$)/gm, '<blockquote>$1</blockquote>')
+                .replace(/^- (.*$)/gm, '<li>$1</li>')
+                .replace(/(<li>.*<\/li>\n?)+/g, m => '<ul>' + m + '</ul>')
+                .replace(/\n/g, '<br>');
+            html += content + '<br>';
+        }
+    });
+    document.getElementById('optimizedPreview').innerHTML = html || '<p>暂无内容</p>';
+}
+
+function renderInterview(d) {
+    const el = document.getElementById('interviewContent');
+
+    // 优先使用AI生成的个性化面试话术（来自 /api/optimize 的返回）
+    const aiAnswers = d.interview_ai || d.interview_answers;
+    if (aiAnswers && aiAnswers.trim()) {
+        // AI返回的是纯文本格式 "Q1: ...\nA1: ...\nQ2: ..."
+        // 用正则解析成 HTML 显示
+        let html = '<h3 style="margin-bottom:1rem">🎤 AI个性化面试话术</h3>';
+        html += '<div class="ai-interview-note">以下答案结合您的真实经历定制，请根据实际情况调整</div>';
+        
+        // 把整个文本按 Q1: Q2: ... 分割
+        const qaBlocks = aiAnswers.split(/(?=Q\d+:)/g).filter(b => b.trim());
+        
+        qaBlocks.forEach(block => {
+            block = block.trim();
+            if (!block) return;
+            // 分割问题和答案 - 找 A数字: 的位置
+            const qPartMatch = block.match(/Q(\d+):?\s*([\s\S]*?)$/);
+            if (!qPartMatch) return;
+            
+            const qNum = qPartMatch[1];
+            let restText = qPartMatch[2];
+            
+            // 在剩余文本中找 A数字: 的位置
+            const aMatch = restText.match(/A\d+:\s*([\s\S]*?)$/i);
+            let qText = restText;
+            let aText = '';
+            
+            if (aMatch) {
+                aText = aMatch[1].trim();
+                qText = restText.substring(0, restText.indexOf(aMatch[0])).trim();
+            }
+            
+            html += '<div class="qa-item">';
+            html += '<div class="question">Q' + qNum + ': ' + qText.replace(/^Q\d+:?\s*/, '') + '</div>';
+            html += '<div class="answer">' + aText + '</div>';
+            html += '</div>';
+        });
+        
+        el.innerHTML = html;
+        return;
+    }
+
+    // 如果没有AI话术，fallback到静态话术库
+    const careerKey = d._career_key;
+    if (!careerKey) { el.innerHTML = '<p>暂无面试话术数据</p>'; return; }
+    fetch('/api/career', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ session_id: sessionId, target_job: d._target_job })
+    }).then(r => r.json()).then(cd => {
+        if (cd.interview_qa && cd.interview_qa.length) {
+            let html = '<h3 style="margin-bottom:1rem">🎤 面试高频问题 & 建议回答</h3>';
+            cd.interview_qa.forEach((qa, i) => {
+                html += '<div class="qa-item">\
+                    <div class="question">Q' + (i+1) + ': ' + qa.q + '</div>\
+                    <div class="answer">' + qa.a + '</div>\
+                </div>';
+            });
+            el.innerHTML = html;
+        } else {
+            el.innerHTML = '<p>暂无面试话术数据</p>';
+        }
+    });
+}
+
+// ========== Copy Resume ==========
+let resumePlainText = '';
+
+function collectResumeText() {
+    // Get raw text from the resume display
+    const el = document.getElementById('optimizedPreview');
+    // Clone and strip HTML tags
+    const clone = el.cloneNode(true);
+    resumePlainText = clone.innerText || clone.textContent || '';
+}
+
+async function copyResume() {
+    collectResumeText();
+    if (!resumePlainText.trim()) {
+        alert('简历内容为空，请先生成优化简历');
+        return;
+    }
+    try {
+        await navigator.clipboard.writeText(resumePlainText);
+        const btn = document.getElementById('copyBtn');
+        btn.textContent = '✅ 已复制';
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.textContent = '📋 一键复制';
+            btn.classList.remove('copied');
+        }, 2500);
+    } catch (err) {
+        // Fallback
+        const ta = document.createElement('textarea');
+        ta.value = resumePlainText;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        const btn = document.getElementById('copyBtn');
+        btn.textContent = '✅ 已复制';
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.textContent = '📋 一键复制';
+            btn.classList.remove('copied');
+        }, 2500);
+    }
+}
+
+// ========== Tab Switching ==========
+document.getElementById('optTabs').addEventListener('click', e => {
+    if (e.target.classList.contains('tab')) {
+        document.querySelectorAll('#optTabs .tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+        e.target.classList.add('active');
+        document.getElementById('tab-' + e.target.dataset.tab).classList.add('active');
+    }
+});
+</script>
+</body>
+</html>
