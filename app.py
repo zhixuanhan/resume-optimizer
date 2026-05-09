@@ -455,7 +455,8 @@ app = Flask(__name__)
 
 
 
-app.config['UPLOAD_FOLDER'] = 'uploads'
+# Vercel 只允许写入 /tmp 目录
+app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER', '/tmp/uploads')
 
 
 

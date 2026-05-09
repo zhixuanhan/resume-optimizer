@@ -1,0 +1,36 @@
+{
+  "session_id": "5594842a",
+  "filename": "text input",
+  "filepath": "",
+  "raw_text": "张三，3年产品经理经验，曾在字节跳动负责社交产品。熟悉用户调研、A/B测试、数据分析。精通SQL、Python。",
+  "sections": {
+    "其他": "张三，3年产品经理经验，曾在字节跳动负责社交产品。熟悉用户调研、A/B测试、数据分析。精通SQL、Python。"
+  },
+  "target_job": "",
+  "diagnosis": null,
+  "career_info": null,
+  "optimized_resume": null,
+  "job_recommendations": {
+    "recommended_jobs": [
+      {
+        "job": "数据产品经理",
+        "match_reason": "数据能力与产品经验匹配",
+        "salary_range": "15-25K",
+        "key_advice": "强化数据建模与商业分析能力"
+      },
+      {
+        "job": "用户增长产品经理",
+        "match_reason": "社交产品经验契合用户增长",
+        "salary_range": "18-30K",
+        "key_advice": "学习用户留存策略与增长黑客技巧"
+      },
+      {
+        "job": "AI产品经理（推荐算法方向）",
+        "match_reason": "数据分析技能适配AI产品",
+        "salary_range": "20-35K",
+        "key_advice": "深入学习机器学习基础与推荐系统原理"
+      }
+    ],
+    "career_path": "短期深耕数据/用户增长领域，中期转向AI产品或高级管理岗，长期目标产品总监或创业孵化。"
+  }
+}
